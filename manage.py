@@ -36,8 +36,9 @@ def AddName(roster = None, name = 'Maria Pepper',deliveryCompany = 'Unknown',si 
 	roster = loadRoster() if not roster else roster
 	if name in roster:
 		packageSheet = client.open('Temp Sheet').worksheet(roster[name].floor)
-		i = 1
-		while packageSheet.cell(i,2).value != None: i+=1
+		# i = 1
+		# while packageSheet.cell(i,2).value != None: i+=1
+		i = int(packageSheet.cell(1,12).value)
 		packageSheet.update_cell(i,1,str(date.today()))
 		packagenum = roster[name].floor + '-' + str(i).zfill(3)
 		packageSheet.update_cell(i,2,packagenum)
@@ -70,9 +71,8 @@ def myClick():
 	#myLabel = Label(root, text=e.get())
 	#myLabel.pack()
 
-myButton = Button(root, text='Submit', command=myClick)
+myButton = Button(root, text='Enter Student Name for Package Entry', command=myClick)
 myButton.pack()
-
 
 
 root.mainloop()
