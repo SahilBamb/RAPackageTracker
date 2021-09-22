@@ -2,6 +2,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import gspread
 from datetime import date
 import csv
+from tkinter import *
 
 class student:
 	def __init__(self,lname,fname,num,hall,room,zipcode,email,dob):
@@ -25,7 +26,6 @@ def loadRoster(fileName = 'Roster.csv'):
 	with open(fileName,'r') as csv_file:
 		csv_reader = csv.reader(csv_file)
 		for line in csv_reader:
-			
 			roster[line[1]+' '+line[0]] = student(line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7])
 	return roster
 
@@ -47,10 +47,43 @@ def AddName(roster = None, name = 'Maria Pepper',deliveryCompany = 'Unknown',si 
 		packageSheet.update_cell(i,6,si)
 		packageSheet.update_cell(i,7,'Y' if sendEmail(roster[name]) else 'N')
 		packageSheet.update_cell(i,8,roster[name].num)
+		return f'Package inputted! Package Number: {packagenum}'
 	else:
-		print('Name not found, please check spelling')
+		return 'Name not found, please check spelling'
+
+
+root = Tk()
+
+
+Name = Entry(root, width = 50)
+Name.pack()
+
+
+def myClick():
+	name = Name.get()
+	#print(f'Looking for name {name}')
+	
+	myLabel = Label(root, text=AddName(None,name))
+	myLabel.pack()
+
+	#print(f'Coming from company {DeliveryCompany}')
+	#myLabel = Label(root, text=e.get())
+	#myLabel.pack()
+
+myButton = Button(root, text='Submit', command=myClick)
+myButton.pack()
+
+
+
+root.mainloop()
+
+
 	
 
+# roster = loadRoster()
+# for x in ['Amber Eiserle', 'Josef Birman', 'Cindy Yang']:
+# 	print(f'Adding {x}...')
+# 	AddName(roster,x)
 
 
 # python_test = client.open('Temp Sheet').sheet1
