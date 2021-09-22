@@ -4,6 +4,11 @@ from datetime import date
 import csv
 from tkinter import *
 
+import os
+import smtplib
+from email.message import EmailMessage
+from email.mime.text import MIMEText
+
 class student:
 	def __init__(self,lname,fname,num,hall,room,zipcode,email,dob):
 		#Last Name,First Name,Student Number,Hall,Room,Address ZIP,Email,Date of Birth
@@ -29,8 +34,35 @@ def loadRoster(fileName = 'Roster.csv'):
 			roster[line[1]+' '+line[0]] = student(line[0],line[1],line[2],line[3],line[4],line[5],line[6],line[7])
 	return roster
 
-def sendEmail(student):
-	return False
+def sendEmail(studentEmail='sahilpwns@gmail.com'):
+
+	#Need to change OS enviromental variables to laurel log-in / pw
+	#Need to allow less secure applications 
+
+	def ReadEmailTemplate(file):
+	    oFile = open(file, 'r')
+	    Subject = oFile.readline().strip()
+	    Body = oFile.read()
+	    oFile.close()
+	    return [Subject, Body]
+	try:
+		Subject, Body = ReadEmailTemplate('EmailTemplate.txt')
+		msg = EmailMessage()
+		BodyM = MIMEText(Body)
+		msg.set_content(Body)
+		msg['From'] = os.environ['LAUREL_EMAIL']
+		msg['To'] = studentEmail
+		msg['Subject'] = Subject
+		with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+			smtp.login(os.environ['LAUREL_EMAIL'], os.environ['LAUREL_EMAILPW'])
+			smtp.sendmail(os.environ['LAUREL_EMAIL'], studentEmail, msg.as_string())
+
+		smtplib.SMTP_SSL('smtp.gmail.com', 465).quit()
+		return True
+	except:
+		return False
+
+
 
 def AddName(roster = None, name = 'Maria Pepper',deliveryCompany = 'Unknown',si = 'NA',):
 	if ',' in name:
@@ -54,9 +86,9 @@ def AddName(roster = None, name = 'Maria Pepper',deliveryCompany = 'Unknown',si 
 		packageSheet.update_cell(i,4,name)
 		packageSheet.update_cell(i,5,roster[name].room)
 		packageSheet.update_cell(i,6,si)
-		packageSheet.update_cell(i,7,'Y' if sendEmail(roster[name]) else 'N')
+		packageSheet.update_cell(i,7,'Y' if sendEmail() else 'N')
 		packageSheet.update_cell(i,8,roster[name].num)
-		return f'Package inputted! Package Number: {packagenum}'
+		return f'Package inputted! Package Number for {roster[name].firstName}: {packagenum}'
 	else:
 		return 'Name not found, please check spelling'
 
