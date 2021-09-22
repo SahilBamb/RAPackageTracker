@@ -33,12 +33,20 @@ def sendEmail(student):
 	return False
 
 def AddName(roster = None, name = 'Maria Pepper',deliveryCompany = 'Unknown',si = 'NA',):
+	if ',' in name:
+
+		name = name.split(',')
+		deliveryCompany = name[1].strip()
+		name = name[0]
+
 	roster = loadRoster() if not roster else roster
 	if name in roster:
 		packageSheet = client.open('Temp Sheet').worksheet(roster[name].floor)
 		# i = 1
 		# while packageSheet.cell(i,2).value != None: i+=1
-		i = int(packageSheet.cell(1,12).value)
+		packageSheet.update_cell(1,13,'=MATCH("@",ARRAYFORMULA(B2:B&"@"),0)')
+		i = int(packageSheet.cell(1,13).value)+1
+		packageSheet.update_cell(1,13,'')
 		packageSheet.update_cell(i,1,str(date.today()))
 		packagenum = roster[name].floor + '-' + str(i).zfill(3)
 		packageSheet.update_cell(i,2,packagenum)
@@ -54,8 +62,6 @@ def AddName(roster = None, name = 'Maria Pepper',deliveryCompany = 'Unknown',si 
 
 
 root = Tk()
-
-
 Name = Entry(root, width = 50)
 Name.pack()
 
