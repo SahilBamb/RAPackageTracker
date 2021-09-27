@@ -64,7 +64,7 @@ def sendEmail(studentEmail='sahilpwns@gmail.com'):
 
 
 
-def AddName(roster = None, name = 'Maria Pepper',deliveryCompany = 'Unknown',si = 'NA',):
+def AddName(roster = None, name = 'John Doe',deliveryCompany = 'Unknown',si = 'NA',):
 	if ',' in name:
 
 		name = name.split(',')
@@ -100,29 +100,11 @@ Name.pack()
 
 def myClick():
 	name = Name.get()
-	#print(f'Looking for name {name}')
-	
 	myLabel = Label(root, text=AddName(None,name))
 	myLabel.pack()
-
-	#print(f'Coming from company {DeliveryCompany}')
-	#myLabel = Label(root, text=e.get())
-	#myLabel.pack()
 
 myButton = Button(root, text='Enter Student Name for Package Entry', command=myClick)
 myButton.pack()
 
 
 root.mainloop()
-
-
-	
-
-# roster = loadRoster()
-# for x in ['Amber Eiserle', 'Josef Birman', 'Cindy Yang']:
-# 	print(f'Adding {x}...')
-# 	AddName(roster,x)
-
-
-# python_test = client.open('Temp Sheet').sheet1
-# python_test = client.open('Temp Sheet').worksheet("Roster")
