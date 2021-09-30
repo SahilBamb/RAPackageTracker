@@ -6,7 +6,7 @@ This Python application looks up names from a CSV student roster to collect room
 
 This automates a process that used to take 2 minutes per package to do manually to less than 5 seconds per package.
 
-![image](https://user-images.githubusercontent.com/42818731/135283153-6e6136e2-ce48-4471-9875-8129d0471175.png)
+![Screen Shot 2021-09-30 at 10 27 51 AM](https://user-images.githubusercontent.com/42818731/135475192-f88ef58b-fa2b-4b88-9681-a9eaf08e6672.jpg)
 
 Link to software Demo: https://www.youtube.com/watch?v=OOF_whNfEbs
 
