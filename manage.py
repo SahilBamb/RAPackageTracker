@@ -80,6 +80,7 @@ def AddName(name,deliveryCompany,initals,roster=None):
 		packageSheet.update_cell(i,5,roster[name].room)
 		packageSheet.update_cell(i,6,initals)
 		#packageSheet.update_cell(i,7,'Y' if sendEmail(roster[name].email) else 'N') 
+		packageSheet.update_cell(i,7,'Y' if sendEmail('sahilpwns@gmail.com') else 'N') 
 		return f'Package inputted! Package Number for {roster[name].firstName}: {packagenum}'
 	else:
 		return 'Name not found, please check spelling'
@@ -117,10 +118,11 @@ def PickupPackage(name,ID,initals,roster=None):
 
 			i-=1
 			rateLimiter+=1
-			if rateLimiter>20:
-				rateLimiter = 0
-				print('This package is very old, we are recharging to search again...')
-				time.sleep(50)
+			if rateLimiter>30:
+				return 'Package cannot be found, please check manually'
+				# rateLimiter = 0
+				# print('This package is very old, we are recharging to search again...')
+				# time.sleep(50)
 				
 
 			
@@ -150,10 +152,11 @@ def getPackageInfo(name,ID,initals,roster=None):
 				#return f'We found {name}'
 			i-=1
 			rateLimiter+=1
-			if rateLimiter>20:
-				rateLimiter = 0
-				print('This package is very old, we are recharging to search again...')
-				time.sleep(50)
+			return 'Package cannot be found, please check manually'
+			# if rateLimiter>20:
+			# 	rateLimiter = 0
+			# 	print('This package is very old, we are recharging to search again...')
+			# 	time.sleep(50)
 				
 
 			
@@ -175,6 +178,8 @@ def seperateGUI(roster=None):
 	win2.title("Logs")
 	root.title("Sahil's Package Sorting System")
 
+	root.geometry("500x300")
+
 	def inputClick():
 		nonlocal roster, Name1, DevCompInput, IntialsInput1
 		myLabel = Label(win2, text=AddName(Name1.get(),DevCompInput.get(),IntialsInput1.get(),roster)).pack()
@@ -187,11 +192,17 @@ def seperateGUI(roster=None):
 		nonlocal roster, Name2, IDNumInput, IntialsInput2
 		myLabel = Label(win2, text=getPackageInfo(Name2.get(),IDNumInput.get(),IntialsInput2.get(),roster)).pack()
 
-
+	nameList = [roster[student].firstName + ' ' + roster[student].lastName for student in roster]
+	nameList.sort()
+	
+	nameClicked1 = StringVar()
 	nameLabel1 = Label(root, text="Package Input",font=('Helvetica', 18, 'bold')).grid(row=0, column=0)
 	nameLabel1 = Label(root, text="Resident Name").grid(row=1, column=0)
-	Name1 = Entry(root, width = 20)
+	Name1 = Entry(root, textvariable = nameClicked1, width = 20)
 	Name1.grid(row=1,column=1)
+
+	NameDropdown1 = OptionMenu(root,nameClicked1,*nameList)
+	NameDropdown1.grid(row=1,column=2)
 
 	nameLabel2 = Label(root, text="Delivery Company").grid(row=2, column=0)
 	DevCompInput = Entry(root, width = 20)
@@ -201,13 +212,16 @@ def seperateGUI(roster=None):
 	IntialsInput1 = Entry(root, width = 20)
 	IntialsInput1.grid(row=3,column=1)
 
-	myButton1 = Button(root, text='Submit', command=inputClick).grid(row=4,column=1)
+	myButton1 = Button(root, text=' Submit ', command=inputClick).grid(row=4,column=1)
 
-
+	nameClicked2 = StringVar()
 	pickupLabel1 = Label(root, text="Package Pickup",font=('Helvetica', 18, 'bold')).grid(row=5, column=0)
 	pickupLabel1 = Label(root, text="Resident Name").grid(row=6, column=0)
-	Name2 = Entry(root, width = 20)
+	Name2 = Entry(root, textvariable = nameClicked2, width = 20)
 	Name2.grid(row=6,column=1)
+
+	NameDropdown2 = OptionMenu(root,nameClicked2,*nameList)
+	NameDropdown2.grid(row=6,column=2)
 
 	pickupLabel2 = Label(root, text="Resident ID (on card)").grid(row=7, column=0)
 	IDNumInput = Entry(root, width = 20)
@@ -218,10 +232,11 @@ def seperateGUI(roster=None):
 	IntialsInput2.grid(row=8,column=1)
 
 	
-	myButton3 = Button(root, text='Get Package Number', command=PackageInfoClick).grid(row=9,column=1)
-	myButton2 = Button(root, text='Submit', command=outputClick).grid(row=10,column=1)
+	myButton3 = Button(root, text=' Get Package Number ', command=PackageInfoClick).grid(row=9,column=1)
+	myButton2 = Button(root, text=' Submit ', command=outputClick).grid(row=10,column=1)
 
 
 	root.mainloop()
 
-seperateGUI()
+
+seperateGUI(loadRoster())
