@@ -24,7 +24,7 @@ Working as an RA in New Jersey Institute of Technology's biggest hall, we would 
 
 ## Code Highlights
 
-Google's Sheet API has a massive limitation in that it can only perform 100 read or writes every 100 seconds. This meant that traditinal forms of cell checking would be too costly and cause the program to go over my allowed read/writes and get locked out. This was a big issue as a large part of updating the sheet was to find the last empty row. A unique solution I found to this issue was to write a VLOOKUP into a cell to find the last empty row, and then read from that cell. This turned a 200-1000 cell checking operation into a 2 cell checking operation. 
+Google's Sheet API has a massive limitation in that it can only perform 100 read or writes every 100 seconds. This meant that traditional forms of cell checking would be too costly and cause the program to go over my allowed read/writes and get locked out. This was a big issue as a large part of updating the sheet was to find the last empty row. A unique solution I found to this issue was to write a VLOOKUP into a cell to find the last empty row, and then read from that cell. This turned a 200-1000 cell checking operation into a 2 cell checking operation. 
 
     packageSheet.update_cell(1,13,'=MATCH("@",ARRAYFORMULA(A4:A&"@"),0)+2')
     i = int(packageSheet.cell(1,13).value)
